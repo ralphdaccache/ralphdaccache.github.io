@@ -20,16 +20,32 @@
     {
       "id": "1",
       "title": "DEVASTATED / CAPONE",
-      "director": "RALPH DACCACHE",
+      "director": "DIRECTOR",
       "videoUrl": "/videos/capone-devastated.mp4",
       "description": "Official music video"
     },
     {
       "id": "2",
       "title": "BADE TO / EIN",
-      "director": "RALPH DACCACHE",
+      "director": "DIRECTOR",
       "videoUrl": "/videos/ein-bade-to.mp4",
       "description": "Official music video"
+    }
+  ],
+  "music": [
+    {
+      "id": "1",
+      "title": "DISCO IN THE 6IX / ARIS MUSIC",
+      "role": "CO-PRODUCER",
+      "audioUrl": "/audio/disco-in-the-6ix.mp3",
+      "coverUrl": "/images/disco-cover.jpg"
+    },
+    {
+      "id": "2",
+      "title": "CREATURE",
+      "role": "SONGWRITER - VOCALIST",
+      "audioUrl": "/audio/creature.mp3",
+      "coverUrl": "/images/creature-cover.jpg"
     }
   ]
 }
