@@ -6,8 +6,17 @@
     { label: 'Writing', href: '#' },
     { label: 'About', href: '#' },
   ];
-  var LOGO_TEXT = 'ralph';
+  var LOGO_TEXT = 'rd';
   var MOBILE_BP = 768;
+
+  if (!document.getElementById('jbm-font-link')) {
+    var fontLink = document.createElement('link');
+    fontLink.id = 'jbm-font-link';
+    fontLink.rel = 'stylesheet';
+    fontLink.href =
+      'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@700&display=swap';
+    document.head.appendChild(fontLink);
+  }
 
   function isActive(link) {
     if (link.href === '#') return false;
@@ -43,10 +52,37 @@
     var pill = document.createElement('a');
     pill.href = '/';
     pill.id = 'nav-logo-pill';
-    pill.style.cssText =
-      pillBase +
-      ';left:24px;padding:10px 22px;font-size:18px;letter-spacing:0.02em;font-weight:500;text-decoration:none;display:inline-flex;align-items:center;gap:8px;';
+    pill.style.cssText = [
+      'position:fixed',
+      'top:24px',
+      'left:24px',
+      'z-index:10000',
+      'width:48px',
+      'height:48px',
+      'border-radius:9px',
+      'background:#ece6d8',
+      'color:#0a0a0a',
+      "font-family:'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace",
+      'font-weight:700',
+      'font-size:26px',
+      'letter-spacing:-0.03em',
+      'text-decoration:none',
+      'display:flex',
+      'align-items:center',
+      'justify-content:center',
+      'box-shadow:0 8px 28px rgba(0,0,0,0.28)',
+      'pointer-events:auto',
+      'opacity:0',
+      'transform:translateY(-8px)',
+      'transition:opacity 600ms ease, transform 600ms ease, box-shadow 200ms ease',
+    ].join(';');
     pill.textContent = LOGO_TEXT;
+    pill.addEventListener('mouseenter', function () {
+      pill.style.boxShadow = '0 12px 36px rgba(0,0,0,0.36)';
+    });
+    pill.addEventListener('mouseleave', function () {
+      pill.style.boxShadow = '0 8px 28px rgba(0,0,0,0.28)';
+    });
     return pill;
   }
 
