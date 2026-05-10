@@ -163,12 +163,14 @@
         var audio = document.getElementById('audio');
         var muteBtn = document.getElementById('mute-btn');
 
-        function render() {
+        var trackItems = [];
+
+        function buildList() {
           listEl.innerHTML = '';
+          trackItems = [];
           tracks.forEach(function (track, idx) {
-            var active = idx === currentIdx;
             var item = document.createElement('div');
-            item.className = 'track-item ' + (active ? 'active' : 'inactive');
+            item.className = 'track-item';
             var h2 = document.createElement('h2');
             h2.className = 'track-title';
             h2.textContent = track.title;
@@ -181,6 +183,16 @@
               if (idx !== currentIdx) switchTo(idx);
             });
             listEl.appendChild(item);
+            trackItems.push(item);
+          });
+          updateActive();
+        }
+
+        function updateActive() {
+          trackItems.forEach(function (item, idx) {
+            var active = idx === currentIdx;
+            item.classList.toggle('active', active);
+            item.classList.toggle('inactive', !active);
           });
         }
 
@@ -205,7 +217,7 @@
           audio.muted = wasMuted;
           audio.play().catch(function () {});
 
-          render();
+          updateActive();
           setTimeout(function () {
             transitioning = false;
           }, 800);
@@ -218,7 +230,7 @@
           audio.src = first.audioUrl;
           audio.muted = true;
           audio.play().catch(function () {});
-          render();
+          buildList();
 
           window.addEventListener(
             'wheel',

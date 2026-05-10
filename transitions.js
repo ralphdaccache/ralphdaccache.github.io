@@ -1,9 +1,12 @@
 (function () {
   var FADE_MS = 700;
+  var lastSnapshot = null;
+  var lastVideoRef = null;
 
   function snapshotVideo(video) {
-    var w = video.videoWidth || video.clientWidth;
-    var h = video.videoHeight || video.clientHeight;
+    if (!video) return null;
+    var w = video.videoWidth || 0;
+    var h = video.videoHeight || 0;
     if (!w || !h) return null;
     var canvas = document.createElement('canvas');
     canvas.width = w;
@@ -16,63 +19,94 @@
     return canvas;
   }
 
-  function showFadeOverlay(canvas) {
-    canvas.style.cssText = [
-      'position:fixed',
+  function captureCurrent() {
+    var video = document.querySelector('video');
+    var snap = snapshotVideo(video);
+    if (snap) lastSnapshot = snap;
+  }
+
+  function showOverlay(snapshot, newVideo) {
+    var parent = (newVideo && newVideo.parentElement) || document.body;
+    var inContainer = parent !== document.body;
+
+    snapshot.style.cssText = [
+      'position:' + (inContainer ? 'absolute' : 'fixed'),
       'inset:0',
-      'width:100vw',
-      'height:100vh',
+      'width:100%',
+      'height:100%',
       'object-fit:cover',
       'pointer-events:none',
-      'z-index:9999',
+      'z-index:' + (inContainer ? 5 : 9999),
       'opacity:1',
-      'transition:opacity ' + FADE_MS + 'ms ease',
+      'transition:opacity ' + FADE_MS + 'ms cubic-bezier(0.4, 0, 0.2, 1)',
     ].join(';');
-    document.body.appendChild(canvas);
-    requestAnimationFrame(function () {
+
+    if (inContainer && newVideo.nextSibling) {
+      parent.insertBefore(snapshot, newVideo.nextSibling);
+    } else {
+      parent.appendChild(snapshot);
+    }
+
+    var faded = false;
+    function startFade() {
+      if (faded) return;
+      faded = true;
       requestAnimationFrame(function () {
-        canvas.style.opacity = '0';
+        requestAnimationFrame(function () {
+          snapshot.style.opacity = '0';
+        });
       });
-    });
-    setTimeout(function () {
-      if (canvas.parentNode) canvas.parentNode.removeChild(canvas);
-    }, FADE_MS + 100);
+      setTimeout(function () {
+        if (snapshot.parentNode) snapshot.parentNode.removeChild(snapshot);
+      }, FADE_MS + 100);
+    }
+
+    if (newVideo && (newVideo.readyState < 3 || newVideo.paused)) {
+      var fired = false;
+      var handler = function () {
+        if (fired) return;
+        fired = true;
+        newVideo.removeEventListener('playing', handler);
+        newVideo.removeEventListener('canplay', handler);
+        setTimeout(startFade, 40);
+      };
+      newVideo.addEventListener('playing', handler);
+      newVideo.addEventListener('canplay', handler);
+      setTimeout(handler, 2000);
+    } else {
+      requestAnimationFrame(startFade);
+    }
   }
 
-  var attached = new WeakSet();
-
-  function attachToVideo(video) {
-    if (attached.has(video)) return;
-    attached.add(video);
-
-    var lastSrc = video.currentSrc || video.src;
-
-    var fire = function () {
-      var nextSrc = video.currentSrc || video.src;
-      if (nextSrc && lastSrc && nextSrc !== lastSrc) {
-        var snap = snapshotVideo(video);
-        if (snap) showFadeOverlay(snap);
+  function checkVideoChanged() {
+    var video = document.querySelector('video');
+    if (!video) return;
+    if (video !== lastVideoRef) {
+      if (lastVideoRef && lastSnapshot) {
+        showOverlay(lastSnapshot, video);
+        lastSnapshot = null;
       }
-      lastSrc = nextSrc;
-    };
-
-    var observer = new MutationObserver(fire);
-    observer.observe(video, { attributes: true, attributeFilter: ['src'] });
-    video.addEventListener('emptied', fire);
-    video.addEventListener('loadstart', fire);
-  }
-
-  function scan() {
-    var videos = document.querySelectorAll('video');
-    for (var i = 0; i < videos.length; i++) attachToVideo(videos[i]);
+      lastVideoRef = video;
+    }
   }
 
   function init() {
-    scan();
-    new MutationObserver(scan).observe(document.body, {
+    setTimeout(captureCurrent, 500);
+    setInterval(captureCurrent, 800);
+
+    ['wheel', 'touchstart', 'click', 'keydown'].forEach(function (ev) {
+      window.addEventListener(ev, captureCurrent, {
+        capture: true,
+        passive: true,
+      });
+    });
+
+    new MutationObserver(checkVideoChanged).observe(document.body, {
       childList: true,
       subtree: true,
     });
+    setInterval(checkVideoChanged, 200);
+    checkVideoChanged();
   }
 
   if (document.readyState === 'loading') {
