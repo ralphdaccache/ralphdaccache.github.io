@@ -47,5 +47,26 @@
       "audioUrl": "/audio/creature.mp3",
       "coverUrl": "/images/creature-cover.jpg"
     }
+  ],
+  "photography": [
+    {
+      "id": "1",
+      "title": "HOPE AT NOMAD",
+      "role": "PHOTOGRAPHER",
+      "photos": [
+        "/photos/Hope/DSC00628.JPEG",
+        "/photos/Hope/DSC01010.JPG"
+      ]
+    },
+    {
+      "id": "2",
+      "title": "TORONTO BY DAY",
+      "role": "PHOTOGRAPHER",
+      "photos": [
+        "/photos/Hope/Architecture/DSC04868.jpg",
+        "/photos/Hope/Architecture/DSC04857.jpg",
+        "/photos/Hope/Architecture/DSC04900.jpg"
+      ]
+    }
   ]
 }
