@@ -1,4 +1,11 @@
 (function () {
+  var style = document.createElement('style');
+  style.textContent =
+    '.fixed.inset-0.bg-black.overflow-hidden .absolute.top-8.right-8 {' +
+    'display: none !important;' +
+    '}';
+  document.head.appendChild(style);
+
   function stripBy() {
     var ps = document.querySelectorAll('p.font-light.transition-all');
     for (var i = 0; i < ps.length; i++) {

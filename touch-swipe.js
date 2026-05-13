@@ -7,6 +7,7 @@
   var startX = null;
   var startTime = null;
   var lastSwipe = 0;
+  var lockedAxis = null;
 
   var NAV_PAGES = ['/', '/music/', '/photography/', '/about/'];
 
@@ -61,6 +62,7 @@
       startY = e.touches[0].clientY;
       startX = e.touches[0].clientX;
       startTime = Date.now();
+      lockedAxis = null;
     },
     { passive: true }
   );
@@ -72,7 +74,10 @@
       var t = e.touches[0];
       var dy = Math.abs(t.clientY - startY);
       var dx = Math.abs(t.clientX - startX);
-      if (dy > 10 || dx > 10) {
+      if (lockedAxis === null && (dx > 10 || dy > 10)) {
+        lockedAxis = dx > dy ? 'h' : 'v';
+      }
+      if (lockedAxis === 'h') {
         e.preventDefault();
       }
     },
