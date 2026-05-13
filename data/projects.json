@@ -3,16 +3,8 @@
     "siteName": "ralph",
     "navigation": [
       {
-        "label": "Directors",
-        "url": "/directors"
-      },
-      {
-        "label": "About",
-        "url": "/about"
-      },
-      {
         "label": "Contact",
-        "url": "/contact"
+        "url": "mailto:ralphdaccache.film@gmail.com"
       }
     ]
   },
@@ -67,7 +59,8 @@
         "/photos/Hope/Architecture/DSC04857.jpg",
         "/photos/Hope/Architecture/DSC04900.jpg",
         "/photos/Hope/Architecture/DSC01967.jpg",
-        "/photos/Hope/Architecture/IMG_8144.jpeg"
+        "/photos/Hope/Architecture/IMG_8144.jpeg",
+        "/photography/DSC05292.jpeg"
       ]
     }
   ]

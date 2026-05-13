@@ -3,8 +3,7 @@
     { label: 'Filmography', href: '/' },
     { label: 'Music', href: '/music/' },
     { label: 'Photography', href: '/photography/' },
-    { label: 'Writing', href: '#' },
-    { label: 'About', href: '#' },
+    { label: 'About', href: '/about/' },
   ];
   var LOGO_TEXT = 'rd';
   var MOBILE_BP = 768;

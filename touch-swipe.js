@@ -8,7 +8,7 @@
   var startTime = null;
   var lastSwipe = 0;
 
-  var NAV_PAGES = ['/', '/music/', '/photography/'];
+  var NAV_PAGES = ['/', '/music/', '/photography/', '/about/'];
 
   var style = document.createElement('style');
   style.textContent = 'html, body { overscroll-behavior: none; }';

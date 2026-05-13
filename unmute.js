@@ -22,7 +22,7 @@
     button.innerHTML = ICON_MUTED;
     button.style.cssText = [
       'position:fixed',
-      'bottom:24px',
+      'top:84px',
       'right:24px',
       'z-index:99999',
       'width:48px',
